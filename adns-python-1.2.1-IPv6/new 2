@@ -1,0 +1,22 @@
+interpret_addr
+interpret_hostaddr
+interpret_answer
+
+ADNS_State_synchronous adns_synchronous
+ADNS_State_submit adns_submit
+ADNS_State_submit_reverse  adns_submit_reverse
+ADNS_State_submit_reverse_any adns_submit_reverse_any
+ADNS_State_allqueries  无
+ADNS_State_select 无
+ADNS_State_completed 无
+ADNS_State_globalsystemfailure adns_globalsystemfailure
+ADNS_State_getattr 无
+
+
+ADNS_Query_check adns_check
+ADNS_Query_wait adns_wait
+ADNS_Query_cancel adns_cancel
+ADNS_Query_getattr
+
+
+adns__init adns_init

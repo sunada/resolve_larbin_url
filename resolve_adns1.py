@@ -50,7 +50,7 @@ class QueryEngine(object):
 
             if answer[3]:
                 self.ip_host[answer[3]] = qname
-            #print qname, '		',answer[3]
+                #print qname, '		',answer[3]
             else:
                 #print 'no answer: ', qname
                 self.host_noip.append(qname)
@@ -62,26 +62,31 @@ class QueryEngine(object):
         hosts= read_file(self.fr)
 	cnt = len(hosts)
         start = time.time()
-        while hosts and len(self._queries) < self.intensity:
-            host = hosts.pop()
-            self.submit(host,adns.rr.AAAA)
+        tmp = 0
+        while hosts:
+            #print 'len(hosts): ', len(hosts)
+            #print 'len(self.ip_host):', len(self.ip_host)
+            #print 'len(self.host_noip):', len(self.host_noip)
+            #print 'tmp:', tmp
+            while hosts and len(self._queries) < self.intensity:
+                tmp += 1
+                host = hosts.pop()
+                self.submit(host,adns.rr.AAAA)
 
-        while not self.finished():
-            self.run()
+            while not self.finished():
+                self.run()
 
         print 'time cost:',time.time() - start
-        ip_host = self.ip_host
-        write_file(self.fw,ip_host)
-        host_noip = self.host_noip
+        write_file(self.fw,self.ip_host)
         #print 'len(host_noip): ', len(host_noip)
-        write_file(self.fw+'_failed_resolve', host_noip)    
-        return cnt, len(ip_host), len(host_noip)
+        write_file(self.fw+'_failed_resolve', self.host_noip)    
+        return cnt, len(self.ip_host), len(self.host_noip)
 
 if __name__=='__main__':
     filename=sys.argv[1]
     savename=sys.argv[2]
     
-    qe = QueryEngine(filename, savename, intensity = 500)
+    qe = QueryEngine(filename, savename, intensity = 100)
     host_cnt, IP_cnt, unresolve_cnt = qe.resolveDns()
     print 'Resolve ' + unicode(host_cnt) + ' domains and get '\
-          + unicode(IP_cnt) + ' IPv6 address.(' + unicode(unresolve_cnt) + ') unresolved'
+          + unicode(IP_cnt) + ' IPv6 address.(' + unicode(unresolve_cnt) + ' unresolved)'

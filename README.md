@@ -23,8 +23,11 @@ Steps:
 
 7. # python setup.py install
 
-How to run it? Example:
 
+Q&A
+Q: 1. How to run it? Example:
+
+A:
 $ ./getDisHosts.py index hosts
 
 index: a file of urls
@@ -39,3 +42,13 @@ hosts: created by getDisHosts.py
 
 the script of resolve_adns.py will create a file named hostIP to save the ipv6 addresses. 
 
+Q: 2. When run the resolve_adns.py, the system spouts an error: libadns.so.1: cannot open shared object file: No such file or directory.
+
+A:
+This is because libadns.so.1 is not in the shared lib path. You can do this to resolve the problem:
+
+$vim /etc/ld.so.conf
+add the path of libadns.so.1 (usually the '/usr/local/lib') to the file and save it
+$ ldconfig
+
+Then you will find no error spouts.
